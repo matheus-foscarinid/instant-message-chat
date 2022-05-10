@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+		<title>Conversa - PA</title>
+
+		<link rel="stylesheet" href="css/styles.css"/>
+		<link rel="stylesheet" 
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" 
+			integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" 
+			crossorigin="anonymous" 
+			referrerpolicy="no-referrer"
+		/>
+	</head>
+
+  <body>
+    <div class="email-container">
+			<div class="email-title">
+				<h1>
+					<i class="fa-solid fa-comments" ></i>
+					Protocolo de Aplicação
+				</h1>
+
+				<span>Para entrar na conversa Insira seu E-mail!</span>
+			</div>
+
+			<div class="email-form">
+				<form id="email-form">
+					<div class="form-control">
+						<input
+							required
+							id="email"
+							type="email"
+							placeholder="Insira seu E-mail"
+						/>
+					</div>
+
+					<button type="submit" class="btn">
+						Acessar Chat
+					</button>
+				</form>
+			</div>
+		</div>
+
+    <div class="chat-container">
+      <header class="chat-header">
+        <h2>
+          <i class="fa-solid fa-comments" ></i>
+          Protocolo de Aplicação
+        </h2>
+        <div>
+          <a href="index.html" class="btn-leave">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Sair
+          </a>
+          <btn onclick="toggleUsersList()" class="btn-leave" style="margin-left: 10px;">
+            <i class="fa-solid fa-user-group"></i> Membros
+          </btn>
+        </div>
+      </header>
+
+      <div class="chat-main">
+        <div class="chat-messages">
+            <div class="my-message" style="display: none;">
+              <p class="message-header">Matheus <span>10:15pm</span></p>
+              <p class="text">
+                Lorem ipsum test.
+              </p>
+
+              <div class="message-icons-container">
+                <a class="message-icon"><i class="fa-solid fa-trash"></i></a>
+                <a class="message-icon"><i class="fa-solid fa-pen"></i></a>
+              </div>
+            </div>
+        </div>
+
+        <div class="chat-users">
+          <p>Usuários atualmente conectados</p>
+          
+          <div class="users-list">
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-form-container">
+        <form id="chat-form">
+          <input
+            id="msg"
+            type="text"
+            placeholder=" Escreva a mensagem..."
+            required
+            autocomplete="off"
+          />
+          <button class="btn-leave" style="margin-left: 20px;">
+            <i class="fa-solid fa-paper-plane"></i>
+             Enviar
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
