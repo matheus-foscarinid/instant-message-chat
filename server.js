@@ -15,13 +15,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Helpers
 const { formatMessage, formatAdminMessage } = require('./utils/message')
-const PORT = process.env.PORT || 3000;
 
 const userEmails = {};
+const messageHistory = [];
 
 // Authentication with E-mail
 io.use((socket, next) => {
-  console.log('new user trying to connect, id:', socket.id);
   const { email } = socket.handshake.auth;
   const emailsList = Object.values(userEmails);
 
@@ -34,41 +33,61 @@ io.use((socket, next) => {
 // Connection handling
 io.on('connection', (socket) => {
   const email = socket.handshake.auth.email || null;
-  console.log('user connected, email:', email);
   
   handleNewConnection(socket, email);
 
-  socket.on('chatMessage', (msg) => {
-    console.log(`Message from ${email}: ${msg}`);
-    io.emit('message', formatMessage(email, msg));
+  // Comando de nova mensagem
+  socket.on('SEND MSG', (message) => {
+    const formattedMessage = formatMessage(email, message);
+    messageHistory.push(formattedMessage);
+
+    io.emit('NEW MSG', formattedMessage);
+  });
+
+  // Comando para pegar os usuários conectados
+  socket.on('WHOS THERE', () => {
+    const emailsList = Object.values(userEmails);
+    socket.emit('USERS', emailsList);
+  });
+
+  // Comando de editar mensagem existente
+  socket.on('EDIT MSG', (index, newMessage) => {
+    const newMessageFormatted = formatMessage(email, newMessage);
+    messageHistory[index] = newMessageFormatted;
+
+    io.emit('MSG EDITED', index, newMessageFormatted);
+  });
+
+  // Comando de excluir mensagem existente
+  socket.on('DELETE MSG', (index) => {
+    messageHistory.splice(index, 1)
+
+    io.emit('MSG DELETED', index);
   });
   
+  // Handler de Disconnect
   socket.on('disconnect', () => {
-    Object.entries(userEmails).forEach(([id, userEmail]) => {
-      if (userEmail === email) {
-        delete userEmails[id]; 
-      }
-    });
+    delete userEmails[socket.id]; 
 
-    console.log('user disconnected, email:', email);
-    io.emit('adminMessage', formatAdminMessage(`O usuário ${email} desconectou`));
-    io.emit('usersList', userEmails);
+    io.emit(
+      'ADM MSG',
+      formatAdminMessage(`O usuário ${email} desconectou`)
+    );
   });
 });
 
 const handleNewConnection = (socket, email) => {
-  io.emit('usersList', userEmails);
+  socket.emit('AUTH OK', { messageHistory });
+  console.log('Ok!');
 
-  socket.emit(
-    'adminMessage',
-    formatAdminMessage('Conectado com sucesso!')
-  );
-
-  socket.broadcast.emit(
-    'adminMessage',
-    formatAdminMessage(`O usuário ${email} conectou`)
+  io.emit(
+    'ADM MSG',
+    formatAdminMessage(`O usuário ${email} se conectou!`)
   );
 }
+
+// Running server
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
   console.log('Server is running! Port: ', PORT);

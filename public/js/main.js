@@ -10,33 +10,48 @@ emailForm.addEventListener('submit', (event) => {
 
   email = event.target.elements.email.value;
   
-  socket = io({
-    auth: { email }
-  });
+  socket = io({ auth: { email }});
 
-  socket.on("connect", () => {
-    document.querySelector('.email-container').style.display = 'none';
-    document.querySelector('.chat-container').style.display = 'block';
+  socket.on('connect', () => {
+    console.log('Teste?');
 
-    socket.on('message', (messageSent) => {
-      console.log(messageSent);
-      outputMessage(messageSent);
-    
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+    socket.on('AUTH OK', (params) => {
+      console.log('Ué');
+      document.querySelector('.email-container').style.display = 'none';
+      document.querySelector('.chat-container').style.display = 'block';
+
+      const { messageHistory } = params;
+      
+      if (messageHistory) {
+        messageHistory.forEach(outputMessage);
+        scrollToEndOfMessages();
+      }
     });
 
-    socket.on('adminMessage', (messageSent) => {
-      outputAdminMessage(messageSent);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+    socket.on('NEW MSG', (message) => {
+      outputMessage(message);
+      scrollToEndOfMessages();
     });
 
-    socket.on('usersList', (users) => {
+    socket.on('ADM MSG', (admMessage) => {
+      outputAdminMessage(admMessage);
+      scrollToEndOfMessages();
+    });
+
+    socket.on('MSG EDITED', (index, newMessage) => {
+      console.log(`Message ${index} edited to: '${newMessage}'`);
+    });
+
+    socket.on('MSG DELETED', (index) => {
+      console.log(`Message ${index} deleted`);
+    });
+
+    socket.on('USERS', (users) => {
       updateUsersList(users);
     });
   });
 
   socket.on("connect_error", () => {
-    event.target.elements.email.value = '';
     alert('Email inválido!');
   });
 });
@@ -48,7 +63,7 @@ chatForm.addEventListener('submit', (event) => {
 
   const msg = event.target.elements.msg.value;
 
-  socket.emit('chatMessage', msg);
+  socket.emit('SEND MSG', msg);
 
   event.target.elements.msg.value = '';
   event.target.elements.msg.focus();
@@ -94,5 +109,9 @@ const updateUsersList = (usersList) => {
   const usersListElement = document.querySelector('.users-list');
   const htmlList = Object.values(usersList).map((user) => `<span>${user}</span>`).join('');
   usersListElement.innerHTML = htmlList;
+}
+
+const scrollToEndOfMessages = () => {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
