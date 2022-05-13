@@ -1,9 +1,10 @@
 const moment = require('moment');
 
-const formatMessage = (email, text) => {
+const formatMessage = (email, text, uniqueId) => {
   return {
     email,
     text,
+    id: uniqueId,
     time: moment().format('HH:mm')
   }
 }

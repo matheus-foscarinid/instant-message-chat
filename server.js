@@ -3,7 +3,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-
+const mailValidator = require('email-validator');
 
 // Initial Configs
 const app = express();
@@ -11,7 +11,6 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // Helpers
 const { formatMessage, formatAdminMessage } = require('./utils/message')
@@ -23,8 +22,9 @@ const messageHistory = [];
 io.use((socket, next) => {
   const { email } = socket.handshake.auth;
   const emailsList = Object.values(userEmails);
+  const isEmailValid = mailValidator.validate(email);
 
-  if (email && !emailsList.includes(email)) {
+  if (isEmailValid && !emailsList.includes(email)) {
     userEmails[socket.id] = email;
     next();
   }
@@ -38,7 +38,9 @@ io.on('connection', (socket) => {
 
   // Comando de nova mensagem
   socket.on('SEND MSG', (message) => {
-    const formattedMessage = formatMessage(email, message);
+    const uniqueId = messageHistory.length
+    console.log(uniqueId);
+    const formattedMessage = formatMessage(email, message, uniqueId);
     messageHistory.push(formattedMessage);
 
     io.emit('NEW MSG', formattedMessage);
@@ -52,10 +54,10 @@ io.on('connection', (socket) => {
 
   // Comando de editar mensagem existente
   socket.on('EDIT MSG', (index, newMessage) => {
-    const newMessageFormatted = formatMessage(email, newMessage);
+    const newMessageFormatted = formatMessage(email, newMessage, index);
     messageHistory[index] = newMessageFormatted;
 
-    io.emit('MSG EDITED', index, newMessageFormatted);
+    io.emit('MSG EDITED', newMessageFormatted);
   });
 
   // Comando de excluir mensagem existente
@@ -78,7 +80,6 @@ io.on('connection', (socket) => {
 
 const handleNewConnection = (socket, email) => {
   socket.emit('AUTH OK', { messageHistory });
-  console.log('Ok!');
 
   io.emit(
     'ADM MSG',

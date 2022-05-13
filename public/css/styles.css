@@ -242,13 +242,14 @@ body {
 	margin-left: 9px;
 	font-size: 14px;
 	cursor: pointer;
-	opacity: 0.6;
+	opacity: 0.5;
 	transition: 0.2s;
 }
 
 .message-icon:hover {
 	opacity: 1;
 	transition: 0.2s;
+	transform: scale(1.1);
 }
 
 .chat-container {
@@ -274,4 +275,35 @@ body {
 	border: none;
 	height: 40px;
 	flex: 1;
+}
+
+.chat-edit-form-container {
+	display: flex;
+}
+
+.chat-edit-form-container input {
+	font-size: 16px;
+	padding: 2px;
+	border-radius: 5px;
+	border: none;
+	height: 30px;
+	flex: 1;
+}
+
+.chat-edit-form-container button {
+	font-size: 14px;
+	cursor: pointer;
+	padding: 5px;
+	border: 0;
+	border-radius: 5px;
+	background: var(--blue-3);
+	color: var(--bg-color-1);
+	transition: 0.2s;
+	text-decoration: none;
+}
+
+.chat-edit-form-container button:hover {
+	transform: scale(1.04);
+	transition: 0.2s;
+	box-shadow: 2px 2px 4px -1px rgba(0,0,0,0.5);
 }
