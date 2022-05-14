@@ -27,6 +27,8 @@ io.use((socket, next) => {
   if (isEmailValid && !emailsList.includes(email)) {
     userEmails[socket.id] = email;
     next();
+  } else {
+    next(new Error("invalid"));
   }
 });
 
@@ -39,7 +41,6 @@ io.on('connection', (socket) => {
   // Comando de nova mensagem
   socket.on('SEND MSG', (message) => {
     const uniqueId = messageHistory.length
-    console.log(uniqueId);
     const formattedMessage = formatMessage(email, message, uniqueId);
     messageHistory.push(formattedMessage);
 
@@ -54,10 +55,9 @@ io.on('connection', (socket) => {
 
   // Comando de editar mensagem existente
   socket.on('EDIT MSG', (index, newMessage) => {
-    const newMessageFormatted = formatMessage(email, newMessage, index);
-    messageHistory[index] = newMessageFormatted;
+    messageHistory[index].text = newMessage;
 
-    io.emit('MSG EDITED', newMessageFormatted);
+    io.emit('MSG EDITED', messageHistory[index]);
   });
 
   // Comando de excluir mensagem existente

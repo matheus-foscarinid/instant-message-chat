@@ -50,7 +50,7 @@ emailForm.addEventListener('submit', (event) => {
   });
 
   socket.on('connect_error', () => {
-    alert('Email inválido!');
+    alert('Email inválido! Por favor insira um E-mail válido para iniciar a conversa.');
   });
 });
 
@@ -139,8 +139,6 @@ const outputEditedMessage = (message) => {
       <a class="message-icon" onClick="showEditMessageForm(${message.id}, '${message.text}')"><i class="fa-solid fa-pen"></i></a>
     </div>
   `;
-
-  chatMessages.appendChild(div);
 };
 
 const outputAdminMessage = (message) => {
