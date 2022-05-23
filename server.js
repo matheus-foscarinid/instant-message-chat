@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
 
   // Comando de excluir mensagem existente
   socket.on('DELETE MSG', (index) => {
-    messageHistory.splice(index, 1)
+    messageHistory[index] = null
 
     io.emit('MSG DELETED', index);
   });

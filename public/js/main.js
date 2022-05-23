@@ -68,6 +68,10 @@ chatForm.addEventListener('submit', (event) => {
 });
 
 const outputMessage = (message) => {
+  if (!message) {
+    return;
+  }
+  
   const div = document.createElement('div');
   
   const messageClass = message.email === email ? 'my-message' : 'message';
