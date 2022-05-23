@@ -50,16 +50,16 @@ usuário estiver conectado;
  - Passa o Id da mensagem que quer editar e o novo conteúdo dela
  - Atualiza no histório, e reenvia para o restante dos usuários
 
-### (SERVER) Nova mensagem recebida
+### (SERVER) Nova mensagem editada
 > MSG EDITED <message_info>
  - Recebe as informações da mensagem, incluindo: conteúdo, autor, ID único e horário para atualizar
 
-### (CLIENT) Editar uma mensagem
+### (CLIENT) Apagar uma mensagem
 > DELETE MSG <id>
  - Passa o Id da mensagem que quer deletar
  - Remove do histório, e reenvia para o restante dos usuários
 
-### (SERVER) Nova mensagem recebida
+### (SERVER) Nova mensagem apagada
 > MSG DELETED <id>
  - Recebe o id da mensagem apagada
 
