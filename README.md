@@ -15,51 +15,51 @@ usuário estiver conectado;
 # Documentacao dos Comandos
 <sup>Os valores entre parenteses "()" são o indicativo de onde vem cada comando, exemplo: (Client) significa que o comando é emitido a partir do lado client</sup>
 
-## (CLIENT) Iniciar conversa
+### (CLIENT) Iniciar conversa
  - Precisa receber o E-mail nos parâmetros de autenticação
  - Se for um Email já conectado ou um Email inválido ele nega a conexão
 
-## (SERVER) Avisa que uma conexão foi um sucesso
+### (SERVER) Avisa que uma conexão foi um sucesso
 > AUTH OK <extra_infos>
  - Passa informações extras no momento do OK da conexão-
  - No momento apenas envia as mensagens anteriores a conexão do usuário
 
-## (CLIENT) Enviar uma mensagem
+### (CLIENT) Enviar uma mensagem
 > SEND MSG <message>
  - Passa a mensagem que quer enviar, se for válida envia para todo o mundo
  - Salva no histórico e possui um ID único
 
-## (SERVER) Nova mensagem recebida
+### (SERVER) Nova mensagem recebida
 > NEW MSG <message_info>
  - Recebe as informações da mensagem, incluindo: conteúdo, autor, ID único e horário
 
-## (SERVER) Nova mensagem de administrador recebida
+### (SERVER) Nova mensagem de administrador recebida
 > ADM MSG <message_info>
  - Recebe as informações da mensagem de admin, incluindo: conteúdo e horário
 
-## (CLIENT) Consultar usuários
+### (CLIENT) Consultar usuários
 > WHOS THERE
  - Pergunta quais são os usuários que estão conectados
 
-## (SERVER) Resposta da consulta usuários
+### (SERVER) Resposta da consulta usuários
 > USERS <emails_list>
  - Recebe todos os Emails de usuários conectados naquele exato momento
 
-## (CLIENT) Editar uma mensagem
+### (CLIENT) Editar uma mensagem
 > EDIT MSG <id> <mensagem>
  - Passa o Id da mensagem que quer editar e o novo conteúdo dela
  - Atualiza no histório, e reenvia para o restante dos usuários
 
-## (SERVER) Nova mensagem recebida
+### (SERVER) Nova mensagem recebida
 > MSG EDITED <message_info>
  - Recebe as informações da mensagem, incluindo: conteúdo, autor, ID único e horário para atualizar
 
-## (CLIENT) Editar uma mensagem
+### (CLIENT) Editar uma mensagem
 > DELETE MSG <id>
  - Passa o Id da mensagem que quer deletar
  - Remove do histório, e reenvia para o restante dos usuários
 
-## (SERVER) Nova mensagem recebida
+### (SERVER) Nova mensagem recebida
 > MSG DELETED <id>
  - Recebe o id da mensagem apagada
 
